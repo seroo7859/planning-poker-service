@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### MySQL ###
+mysql-data/
+
+### Environment ###
+.env

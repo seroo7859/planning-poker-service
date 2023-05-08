@@ -1,0 +1,12 @@
+${AnsiBackground.DEFAULT}${AnsiColor.WHITE}
+ ______ __                     __                ______         __
+|   __ \  |.---.-.-----.-----.|__|.-----.-----. |   __ \.-----.|  |--.-----.----.
+|    __/  ||  _  |     |     ||  ||     |  _  | |    __/|  _  ||    <|  -__|   _|
+|___|  |__||___._|__|__|__|__||__||__|__|___  | |___|   |_____||__|__|_____|__|
+                                        |_____|
+${AnsiBackground.DEFAULT}${AnsiColor.BLUE}
+:: Application Name    :: ${spring.application.name}
+:: Application Version :: ${spring.application.version}
+:: Spring Boot Version :: ${spring-boot.version}
+:: Active Profiles     :: ${spring.profiles.active}
+${AnsiBackground.DEFAULT}${AnsiColor.DEFAULT}
