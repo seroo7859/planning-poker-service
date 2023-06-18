@@ -3,9 +3,7 @@ package de.bht.planningpoker.controller;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import de.bht.planningpoker.auth.jwt.exception.JwtGenerationException;
 import de.bht.planningpoker.auth.jwt.exception.JwtValidationException;
-import de.bht.planningpoker.service.exception.ServiceException;
-import de.bht.planningpoker.service.exception.SessionNotFoundException;
-import de.bht.planningpoker.service.exception.UserNotAuthenticatedException;
+import de.bht.planningpoker.service.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
@@ -20,6 +18,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -68,7 +68,7 @@ public class ExceptionHandlerAdvice {
                 .collect(Collectors.joining(", "));
 
         // Build response
-        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.BAD_REQUEST, request, message, ex.getClass().toString());
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.BAD_REQUEST, request, message, ex);
         return buildResponseEntity(errorMsg);
     }
 
@@ -87,6 +87,18 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorMsg> handleConstraintViolationException(ConstraintViolationException ex, HttpServletRequest request) {
         ErrorMsg errorMsg = new ErrorMsg(HttpStatus.BAD_REQUEST, request, ex);
+        return buildResponseEntity(errorMsg);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorMsg> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex, HttpServletRequest request) {
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.EXPECTATION_FAILED, request, "File to large", ex);
+        return buildResponseEntity(errorMsg);
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<ErrorMsg> handleMultipartException(MultipartException ex, HttpServletRequest request) {
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.INTERNAL_SERVER_ERROR, request, "Failed to upload file", ex);
         return buildResponseEntity(errorMsg);
     }
 
@@ -111,6 +123,24 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(SessionNotFoundException.class)
     public ResponseEntity<ErrorMsg> handleSessionNotFoundException(SessionNotFoundException ex, HttpServletRequest request) {
         ErrorMsg errorMsg = new ErrorMsg(HttpStatus.NOT_FOUND, request, ex);
+        return buildResponseEntity(errorMsg);
+    }
+
+    @ExceptionHandler(BacklogNotFoundException.class)
+    public ResponseEntity<ErrorMsg> handleBacklogNotFoundException(BacklogNotFoundException ex, HttpServletRequest request) {
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.NOT_FOUND, request, ex);
+        return buildResponseEntity(errorMsg);
+    }
+
+    @ExceptionHandler(BacklogItemNotFoundException.class)
+    public ResponseEntity<ErrorMsg> handleBacklogItemNotFoundException(BacklogItemNotFoundException ex, HttpServletRequest request) {
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.NOT_FOUND, request, ex);
+        return buildResponseEntity(errorMsg);
+    }
+
+    @ExceptionHandler(OperationNotAllowedException.class)
+    public ResponseEntity<ErrorMsg> handleOperationNotAllowedException(OperationNotAllowedException ex, HttpServletRequest request) {
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.FORBIDDEN, request, ex);
         return buildResponseEntity(errorMsg);
     }
 
@@ -149,8 +179,8 @@ public class ExceptionHandlerAdvice {
             this(status.value(), request.getRequestURI(), LocalDateTime.now(), th.getMessage(), th.getClass().getName());
         }
 
-        public ErrorMsg(HttpStatus status, HttpServletRequest request, String message, String exception) {
-            this(status.value(), request.getRequestURI(), LocalDateTime.now(), message, exception);
+        public ErrorMsg(HttpStatus status, HttpServletRequest request, String message, Throwable th) {
+            this(status.value(), request.getRequestURI(), LocalDateTime.now(), message, th.getClass().getName());
         }
     }
 }
