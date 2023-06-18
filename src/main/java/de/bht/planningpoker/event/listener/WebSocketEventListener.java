@@ -1,15 +1,13 @@
-package de.bht.planningpoker.service.listener;
+package de.bht.planningpoker.event.listener;
 
 import de.bht.planningpoker.auth.CustomUserDetails;
-import de.bht.planningpoker.event.UserConnectedEvent;
-import de.bht.planningpoker.event.UserDisconnectedEvent;
+import de.bht.planningpoker.event.publisher.UserPublisher;
 import de.bht.planningpoker.model.User;
 import de.bht.planningpoker.repository.UserRepository;
 import de.bht.planningpoker.service.exception.ServiceErrorCode;
 import de.bht.planningpoker.service.exception.ServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.dao.DataAccessException;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -29,7 +27,7 @@ import java.util.Objects;
 public class WebSocketEventListener {
 
     private final UserRepository repository;
-    private final ApplicationEventPublisher eventPublisher;
+    private final UserPublisher publisher;
 
     @EventListener
     @Transactional
@@ -47,7 +45,7 @@ public class WebSocketEventListener {
         try {
             user.setActive(true);
             repository.save(user);
-            eventPublisher.publishEvent(new UserConnectedEvent(user));
+            publisher.publishUserConnectedEvent(user);
         } catch(DataAccessException e) {
             throw new ServiceException(ServiceErrorCode.UPDATE_ERROR, e);
         }
@@ -66,7 +64,7 @@ public class WebSocketEventListener {
             repository.findById(userId).ifPresent(user -> {
                 user.setActive(false);
                 repository.save(user);
-                eventPublisher.publishEvent(new UserDisconnectedEvent(user));
+                publisher.publishUserDisconnectedEvent(user);
             });
         } catch (DataAccessException e) {
             throw new ServiceException(ServiceErrorCode.UPDATE_ERROR, e);
