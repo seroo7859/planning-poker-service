@@ -41,6 +41,11 @@ public class Session {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Deck deck;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "backlog_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Backlog backlog;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     @CreatedBy
@@ -56,6 +61,9 @@ public class Session {
         // Set missing back references
         if (Objects.isNull(team.getSession())) {
             team.setSession(this);
+        }
+        if (Objects.isNull(backlog.getSession())) {
+            backlog.setSession(this);
         }
     }
 
