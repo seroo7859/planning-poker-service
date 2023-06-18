@@ -52,6 +52,7 @@ public class WebSecurityConfig {
                     .requestMatchers(HttpMethod.DELETE, "/api/session/*").authenticated()
                     .requestMatchers(HttpMethod.GET, "/api/session/*").authenticated()
                     .requestMatchers(HttpMethod.GET, "/api/user/info").authenticated()
+                    .requestMatchers("/api/backlog/*").authenticated()
                     .anyRequest().permitAll()
             )
             .exceptionHandling()
