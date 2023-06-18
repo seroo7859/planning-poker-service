@@ -56,6 +56,22 @@ public class User implements Cloneable {
         return active;
     }
 
+    public boolean isModerator() {
+        return role.equals(Role.MODERATOR);
+    }
+
+    public boolean isParticipant() {
+        return role.equals(Role.PARTICIPANT);
+    }
+
+    public boolean isSpectator() {
+        return role.equals(Role.SPECTATOR);
+    }
+
+    public String getSessionId() {
+        return team.getSession().getPublicId();
+    }
+
     @Override
     public User clone() {
         try {
