@@ -70,7 +70,7 @@ public interface SessionResource {
     ResponseEntity<SessionDto> create(@RequestBody @Valid SessionCreateDto dto) throws ServiceException;
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a session")
+    @Operation(summary = "Delete a session by public ID")
     @Parameter(name = "id", description = "Public ID of the session")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Session deleted", content = @Content),
@@ -83,7 +83,7 @@ public interface SessionResource {
 
     @PostMapping("/{id}/join")
     @ResponseBody
-    @Operation(summary = "Join a session")
+    @Operation(summary = "Join a session by public ID")
     @Parameter(name = "id", description = "Public ID of the session")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Session joined", content = @Content(schema = @Schema(implementation = SessionDto.class))),
@@ -93,10 +93,10 @@ public interface SessionResource {
 
     @PostMapping("/{id}/leave")
     @ResponseBody
-    @Operation(summary = "Leave a session")
+    @Operation(summary = "Leave a session by public ID")
     @Parameter(name = "id", description = "Public ID of the session")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Session leaved", content = @Content),
+            @ApiResponse(responseCode = "200", description = "Session leaved", content = @Content(schema = @Schema(implementation = SessionDto.class))),
             @ApiResponse(responseCode = "401", description = "User not authenticated", content = @Content)
     })
     @SecurityRequirement(name = "bearer-auth")
