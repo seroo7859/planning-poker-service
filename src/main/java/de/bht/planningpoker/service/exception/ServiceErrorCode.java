@@ -1,6 +1,8 @@
 package de.bht.planningpoker.service.exception;
 
 public enum ServiceErrorCode {
+    OPERATION_ERROR,
+
     READ_ERROR,
     CREATE_ERROR,
     DELETE_ERROR,
