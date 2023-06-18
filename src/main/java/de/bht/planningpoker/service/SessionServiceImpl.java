@@ -1,7 +1,6 @@
 package de.bht.planningpoker.service;
 
-import de.bht.planningpoker.event.UserJoinedEvent;
-import de.bht.planningpoker.event.UserLeavedEvent;
+import de.bht.planningpoker.event.publisher.UserPublisher;
 import de.bht.planningpoker.model.Role;
 import de.bht.planningpoker.model.Session;
 import de.bht.planningpoker.model.Team;
@@ -9,7 +8,6 @@ import de.bht.planningpoker.model.User;
 import de.bht.planningpoker.repository.SessionRepository;
 import de.bht.planningpoker.service.exception.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +22,7 @@ public class SessionServiceImpl implements SessionService {
 
     private final SessionRepository repository;
     private final UserService userService;
-    private final ApplicationEventPublisher eventPublisher;
+    private final UserPublisher userPublisher;
 
     @Override
     public Page<Session> paginateSession(Pageable pageable) throws ServiceException {
@@ -71,7 +69,7 @@ public class SessionServiceImpl implements SessionService {
                         .get(0);
                 if (Objects.nonNull(user) && user.getRole().equals(Role.MODERATOR)) {
                     repository.updateCreatedBy(newSession.getId(), user);
-                    eventPublisher.publishEvent(new UserJoinedEvent(user));
+                    userPublisher.publishUserJoinedEvent(user);
                 }
             });
             return createdSession.orElseThrow(() -> new SessionCreateFailedException(session));
@@ -127,7 +125,7 @@ public class SessionServiceImpl implements SessionService {
                     throw new MaxTeamSizeReachedException(Team.MAX_TEAM_SIZE);
                 }
                 team.addMember(user);
-                eventPublisher.publishEvent(new UserJoinedEvent(user));
+                userPublisher.publishUserJoinedEvent(user);
                 return session;
             }
         } catch(DataAccessException e) {
@@ -152,9 +150,8 @@ public class SessionServiceImpl implements SessionService {
                     return session;
                 }
 
-                UserLeavedEvent userLeaved = new UserLeavedEvent(teamMember);
-                team.removeMember(teamMember);
-                eventPublisher.publishEvent(userLeaved);
+                team.removeMember(teamMember.clone());
+                userPublisher.publishUserLeavedEvent(teamMember);
                 return session;
             } else {
                 throw new TeamMemberNotFoundException(user);
