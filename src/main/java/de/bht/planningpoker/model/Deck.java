@@ -16,6 +16,7 @@ import java.util.List;
 @Entity
 @Data
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Deck {
@@ -51,7 +52,19 @@ public class Deck {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    protected Deck() {}
+    public Card getCard(String cardValue) {
+        return cards
+                .stream()
+                .filter(card -> cardValue.equalsIgnoreCase(card.getValue()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public boolean hasCard(String cardValue) {
+        return cards
+                .stream()
+                .anyMatch(card -> cardValue.equalsIgnoreCase(card.getValue()));
+    }
 
     public void addCard(Card card) {
         cards.add(card);
@@ -59,6 +72,10 @@ public class Deck {
 
     public void removeCard(Card card) {
         cards.remove(card);
+    }
+
+    public int getSize() {
+        return cards.size();
     }
 
 }

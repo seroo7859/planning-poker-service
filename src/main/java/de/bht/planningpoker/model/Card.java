@@ -2,10 +2,7 @@ package de.bht.planningpoker.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,6 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Card {
@@ -68,7 +66,5 @@ public class Card {
     @Column(nullable = false)
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
-    protected Card() {}
 
 }
