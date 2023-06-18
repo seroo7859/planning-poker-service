@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +21,7 @@ public class SessionMapperImpl implements SessionMapper {
 
     private final TeamMapper teamMapper;
     private final DeckMapper deckMapper;
+    private final BacklogMapper backlogMapper;
 
     @Override
     public SessionPageDto mapToDto(Page<Session> pagedSessions) {
@@ -44,6 +46,8 @@ public class SessionMapperImpl implements SessionMapper {
                             .teamName(session.getTeam().getName())
                             .totalMembers(session.getTeam().getSize())
                             .activeMembers(session.getTeam().getActiveMembers().size())
+                            .totalBacklogItems(session.getBacklog().getSize())
+                            .estimatedBacklogItems(session.getBacklog().getEstimatedItems().size())
                             .deckName(session.getDeck().getName())
                             .deckCards(deckCardsToCsv.apply(session.getDeck().getCards()))
                             .createdAt(convertToDate(session.getCreatedAt()))
@@ -62,6 +66,7 @@ public class SessionMapperImpl implements SessionMapper {
                 .id(session.getPublicId())
                 .team(teamMapper.mapToDto(session.getTeam()))
                 .deck(deckMapper.mapToDto(session.getDeck()))
+                .backlog(backlogMapper.mapToDto(session.getBacklog()))
                 .createdAt(convertToDate(session.getCreatedAt()))
                 .build();
     }
@@ -84,10 +89,16 @@ public class SessionMapperImpl implements SessionMapper {
                 .members(members)
                 .build();
 
+        final Backlog backlog = Backlog.builder()
+                .name("My Product Backlog")
+                .items(Collections.emptyList())
+                .build();
+
         return Session.builder()
                 .publicId(UUID.randomUUID().toString())
                 .team(team)
                 .deck(deckMapper.mapToModel(sessionCreateDto.getDeck()))
+                .backlog(backlog)
                 .build();
     }
 
