@@ -28,6 +28,9 @@ public class SessionDto {
     @NotNull(message = "Deck may not be null")
     private @Valid DeckDto deck;
 
+    @NotNull(message = "Backlog may not be null")
+    private @Valid BacklogDto backlog;
+
     @NotNull(message = "CreatedAt may not be null")
     @PastOrPresent(message = "CreatedAp must be on past or present")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

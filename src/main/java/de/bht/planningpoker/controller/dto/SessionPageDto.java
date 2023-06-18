@@ -77,6 +77,9 @@ public class SessionPageDto {
         @JsonIgnore
         public static final int MAX_TEAM_SIZE = 8;
 
+        @JsonIgnore
+        public static final int MAX_BACKLOG_SIZE = 1000;
+
         @NotBlank(message = "ID may not be blank")
         @UUID(message = "ID must be a UUID")
         @Schema(name = "id", description = "The public ID of the session", example = "0ea43720-2256-46de-8854-0359ef5c4977")
@@ -99,6 +102,18 @@ public class SessionPageDto {
         @Max(value = MAX_TEAM_SIZE, message = "Maximum of " + MAX_TEAM_SIZE + " members can be active")
         @Schema(name = "activeMembers", description = "The count of active members", example = "3")
         private int activeMembers;
+
+        @NotNull(message = "TotalBacklogItems may not be null")
+        @Min(value = 0, message = "Minimum of 0 backlog items can be in a backlog")
+        @Max(value = MAX_BACKLOG_SIZE, message = "Maximum of " + MAX_BACKLOG_SIZE + " backlog items can be in a backlog")
+        @Schema(name = "totalBacklogItems", description = "The total count of backlog items in the backlog", example = "10")
+        private int totalBacklogItems;
+
+        @NotNull(message = "EstimatedBacklogItems may not be null")
+        @Min(value = 0, message = "Minimum of 0 backlog items can be estimated")
+        @Max(value = MAX_BACKLOG_SIZE, message = "Maximum of " + MAX_BACKLOG_SIZE + " backlog items can be estimated")
+        @Schema(name = "totalBacklogItems", description = "The total count of estimated backlog items", example = "3")
+        private int estimatedBacklogItems;
 
         @NotBlank(message = "DeckName may not be blank")
         @Size(min = 1, max = 32, message = "DeckName must be between 1 and 32 characters long")
