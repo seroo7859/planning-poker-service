@@ -29,19 +29,19 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 
     @EntityGraph(
             type = EntityGraph.EntityGraphType.FETCH,
-            attributePaths = { "team", "team.members", "deck", "deck.cards" }
+            attributePaths = { "team", "team.members", "deck", "deck.cards", "backlog", "backlog.items" }
     )
     Optional<Session> findByPublicId(String publicId);
 
     @EntityGraph(
             type = EntityGraph.EntityGraphType.FETCH,
-            attributePaths = { "team", "team.members", "deck", "deck.cards" }
+            attributePaths = { "team", "team.members", "deck", "deck.cards", "backlog", "backlog.items" }
     )
     Optional<Session> findByPublicIdAndTeamMembers(String publicId, User user);
 
     @EntityGraph(
             type = EntityGraph.EntityGraphType.FETCH,
-            attributePaths = { "team", "team.members", "deck", "deck.cards" }
+            attributePaths = { "team", "team.members", "deck", "deck.cards", "backlog", "backlog.items" }
     )
     @Override
     List<Session> findAllById(Iterable<Long> ids);
