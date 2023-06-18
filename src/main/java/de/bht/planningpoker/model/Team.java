@@ -72,7 +72,7 @@ public class Team {
     }
 
     public void addMember(User member) {
-        if (members.size() < 8) {
+        if (members.size() < MAX_TEAM_SIZE) {
             members.add(member);
             member.setTeam(this);
         }
