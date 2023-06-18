@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `user`
     `created_at` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT `pk_user` PRIMARY KEY (`id`),
-    CONSTRAINT `fk_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`)
+    CONSTRAINT `fk_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE SET NULL
 );
 
 
@@ -71,16 +71,49 @@ CREATE TABLE IF NOT EXISTS `deck_card`
 );
 
 
+CREATE TABLE IF NOT EXISTS `backlog`
+(
+    `id`         BIGINT      NOT NULL AUTO_INCREMENT,
+    `name`       VARCHAR(32) NOT NULL,
+    `created_at` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT `pk_backlog` PRIMARY KEY (`id`)
+);
+
+
+CREATE TABLE IF NOT EXISTS `backlog_item`
+(
+    `id`           BIGINT       NOT NULL AUTO_INCREMENT,
+    `backlog_id`   BIGINT       NOT NULL,
+    `list_index`   INT          NOT NULL DEFAULT 0,
+    `number`       VARCHAR(5)   NOT NULL DEFAULT 'US001',
+    `title`        VARCHAR(64)  NOT NULL,
+    `description`  VARCHAR(256) NOT NULL,
+    `estimation`   VARCHAR(3)   NOT NULL,
+    `priority`     VARCHAR(32)  NOT NULL,
+    `created_by`   BIGINT       NULL,
+    `created_at`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_by`   BIGINT       NULL,
+    `updated_at`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT `pk_backlog_item` PRIMARY KEY (`id`),
+    CONSTRAINT `fk_backlog_item_backlog`    FOREIGN KEY (`backlog_id`) REFERENCES `backlog` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_backlog_item_created_by` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE SET NULL,
+    CONSTRAINT `fk_backlog_item_updated_by` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL
+);
+
+
 CREATE TABLE IF NOT EXISTS `session`
 (
     `id`         BIGINT      NOT NULL AUTO_INCREMENT,
     `public_id`  VARCHAR(36) NOT NULL UNIQUE,
     `team_id`    BIGINT      NULL,
     `deck_id`    BIGINT      NULL,
+    `backlog_id` BIGINT      NULL,
     `created_by` BIGINT      NULL,
     `created_at` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT `pk_session` PRIMARY KEY (`id`),
-    CONSTRAINT `fk_session_team` FOREIGN KEY (`team_id`) REFERENCES `team` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk_session_deck` FOREIGN KEY (`deck_id`) REFERENCES `deck` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk_session_user` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`)
+    CONSTRAINT `fk_session_team`    FOREIGN KEY (`team_id`)    REFERENCES `team` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_session_deck`    FOREIGN KEY (`deck_id`)    REFERENCES `deck` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_session_backlog` FOREIGN KEY (`backlog_id`) REFERENCES `backlog` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_session_user`    FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE CASCADE
 );

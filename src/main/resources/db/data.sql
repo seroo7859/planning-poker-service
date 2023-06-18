@@ -5,7 +5,7 @@ DELETE FROM `team`;
 INSERT INTO `team`
     (`id`, `name`)
 VALUES
-    (1, 'MyTeam'),
+    (1, 'My Remote Team'),
     (2, 'Frontend Team'),
     (3, 'Backend Team');
 
@@ -143,10 +143,46 @@ VALUES
     (3, 37, 9);
 
 
+DELETE FROM `backlog`;
+INSERT INTO `backlog`
+    (`id`, `name`)
+VALUES
+    (1, 'My Product Backlog'),
+    (2, 'Sprint Backlog'),
+    (3, 'Tasks');
+
+
+DELETE FROM `backlog_item`;
+INSERT INTO `backlog_item`
+    (`id`, `backlog_id`, `list_index`, `number`, `title`, `description`, `estimation`, `priority`, `created_by`, `updated_by`)
+VALUES
+    (1, 1, 0, 'US007', 'Create Account', 'As an unauthorized User I want to create a new account', '3', '1', 1, 1),
+    (2, 1, 1, 'US001', 'Login', 'As an unauthorized User I want to login with username and password', '1', '2', 1, 1),
+    (3, 1, 2, 'US010', 'Logout', 'As an authorized User I want to logout', '1', '3', 1, 1),
+    (4, 1, 3, 'US009', 'Reset Password', 'As an authorized User I want to be able to reset my password', '1', '4', 1, 1),
+    (5, 1, 4, 'US002', 'List Items', 'As an authorized User I want to see the list of items so that I can select one', '3', '5', 1, 1),
+    (6, 1, 5, 'US004', 'Add Item', 'As an authorized User I want to add a new item so that it appears in the list', '5', '6', 1, 1),
+    (7, 1, 6, 'US003', 'Delete Item', 'As an authorized User I want to delete the selected item', '2', '7', 1, 1),
+    (8, 1, 7, 'US005', 'Edit Item', 'As an authorized user I want to edit the selected item', '5', '8', 1, 1),
+    (9, 1, 8, 'US006', 'Import Data', 'As an authorized user I want to be able to import data', '8', '9', 1, 1),
+    (10, 1, 9, 'US008', 'Export Data', 'As an authorized user I want to be able to export data', '8', '10', 1, 1),
+
+    (11, 2, 0, 'US007', 'Create Account', 'As an unauthorized User I want to create a new account', '3', '1', 1, 1),
+    (12, 2, 1, 'US001', 'Login', 'As an unauthorized User I want to login with username and password', '1', '2', 1, 1),
+    (13, 2, 2, 'US010', 'Logout', 'As an authorized User I want to logout', '', '3', 1, 1),
+    (14, 2, 3, 'US009', 'Reset Password', 'As an authorized User I want to be able to reset my password', '', '4', 1, 1),
+    (15, 2, 4, 'US002', 'List Items', 'As an authorized User I want to see the list of items so that I can select one', '', '5', 1, 1),
+    (16, 2, 5, 'US004', 'Add Item', 'As an authorized User I want to add a new item so that it appears in the list', '', '6', 1, 1),
+    (17, 2, 6, 'US003', 'Delete Item', 'As an authorized User I want to delete the selected item', '', '7', 1, 1),
+    (18, 2, 7, 'US005', 'Edit Item', 'As an authorized user I want to edit the selected item', '', '8', 1, 1),
+    (19, 2, 8, 'US006', 'Import Data', 'As an authorized user I want to be able to import data', '', '9', 1, 1),
+    (20, 2, 9, 'US008', 'Export Data', 'As an authorized user I want to be able to export data', '', '10', 1, 1);
+
+
 DELETE FROM `session`;
 INSERT INTO `session`
-(`id`, `public_id`, `team_id`, `deck_id`, `created_by`)
+    (`id`, `public_id`, `team_id`, `deck_id`, `backlog_id`, `created_by`)
 VALUES
-    (1, UUID(), 1, 1, 1),
-    (2, UUID(), 2, 2, 1),
-    (3, UUID(), 3, 3, 1);
+    (1, UUID(), 1, 1, 1, 1),
+    (2, UUID(), 2, 2, 2, 1),
+    (3, UUID(), 3, 3, 3, 1);
