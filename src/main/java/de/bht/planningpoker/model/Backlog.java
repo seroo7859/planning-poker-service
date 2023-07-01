@@ -65,6 +65,12 @@ public class Backlog {
                 .toList();
     }
 
+    public List<BacklogItem> getNotEstimatedItems() {
+        return items.stream()
+                .filter(backlogItem -> !backlogItem.isEstimated())
+                .toList();
+    }
+
     public int getItemIndex(String number) {
         if (Objects.isNull(number)) {
             return -1;
