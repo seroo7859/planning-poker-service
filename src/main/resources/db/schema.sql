@@ -1,3 +1,6 @@
+SET time_zone = '+2:00';
+
+
 CREATE DATABASE IF NOT EXISTS `planningpoker`;
 USE `planningpoker`;
 
@@ -116,4 +119,30 @@ CREATE TABLE IF NOT EXISTS `session`
     CONSTRAINT `fk_session_deck`    FOREIGN KEY (`deck_id`)    REFERENCES `deck` (`id`) ON DELETE CASCADE,
     CONSTRAINT `fk_session_backlog` FOREIGN KEY (`backlog_id`) REFERENCES `backlog` (`id`) ON DELETE CASCADE,
     CONSTRAINT `fk_session_user`    FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS `estimation_round` (
+    `id`              BIGINT   NOT NULL AUTO_INCREMENT,
+    `session_id`      BIGINT   NOT NULL,
+    `backlog_item_id` BIGINT   NOT NULL,
+    `started_at`      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `finished_at`     DATETIME NULL,
+    CONSTRAINT `pk_estimation_round` PRIMARY KEY (`id`),
+    CONSTRAINT `fk_session`      FOREIGN KEY (`session_id`)      REFERENCES `session` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_backlog_item` FOREIGN KEY (`backlog_item_id`) REFERENCES `backlog_item` (`id`) ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS `estimation` (
+    `id`                  BIGINT     NOT NULL AUTO_INCREMENT,
+    `estimation_round_id` BIGINT     NOT NULL,
+    `list_index`          INT        NOT NULL DEFAULT 0,
+    `estimation_value`    VARCHAR(3) NOT NULL,
+    `created_by`          BIGINT     NULL,
+    `created_at`          DATETIME   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`          DATETIME   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT `pk_estimation` PRIMARY KEY (`id`),
+    CONSTRAINT `fk_estimation_round` FOREIGN KEY (`estimation_round_id`) REFERENCES `estimation_round` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_estimation_user`  FOREIGN KEY (`created_by`)          REFERENCES `user` (`id`) ON DELETE CASCADE
 );

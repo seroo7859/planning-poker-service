@@ -186,3 +186,39 @@ VALUES
     (1, UUID(), 1, 1, 1, 1),
     (2, UUID(), 2, 2, 2, 1),
     (3, UUID(), 3, 3, 3, 1);
+
+
+DELETE FROM `estimation_round`;
+INSERT INTO `estimation_round`
+    (`id`, `session_id`, `backlog_item_id`, `finished_at`)
+VALUES
+    (1, 1, 1, TIMESTAMPADD(MINUTE, 1, CURRENT_TIMESTAMP())),
+    (2, 1, 2, TIMESTAMPADD(MINUTE, 1, CURRENT_TIMESTAMP())),
+    (3, 1, 3, TIMESTAMPADD(MINUTE, 1, CURRENT_TIMESTAMP())),
+
+    (4, 2, 11, TIMESTAMPADD(MINUTE, 1, CURRENT_TIMESTAMP())),
+    (5, 2, 12, TIMESTAMPADD(MINUTE, 1, CURRENT_TIMESTAMP())),
+    (6, 2, 13, TIMESTAMPADD(MINUTE, 1, CURRENT_TIMESTAMP()));
+
+
+DELETE FROM `estimation`;
+INSERT INTO `estimation`
+    (`id`, `estimation_round_id`, `list_index`, `estimation_value`, `created_by`)
+VALUES
+    (1, 1, 0, '8', 1),
+    (2, 1, 1, '3', 2),
+
+    (3, 2, 0, '5', 1),
+    (4, 2, 1, '3', 2),
+
+    (5, 3, 0, '3', 1),
+    (6, 3, 1, '3', 2),
+
+    (7, 4, 0, '13', 4),
+    (8, 4, 1, '5', 5),
+
+    (9, 5, 0, '5', 4),
+    (10, 5, 1, '8', 5),
+
+    (11, 6, 0, '5', 4),
+    (12, 6, 1, '5', 5);
