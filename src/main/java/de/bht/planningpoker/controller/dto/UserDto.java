@@ -21,7 +21,6 @@ public class UserDto {
     @Schema(name = "name", description = "The name of the user", example = "MyName")
     private String name;
 
-    @NotNull(message = "Active may not be null")
     @Schema(name = "active", description = "Is user active", example = "true")
     private boolean active;
 
