@@ -20,7 +20,6 @@ public class BacklogItemMoveResultDto {
     @NotNull(message = "BacklogItem may not be null")
     private @Valid BacklogDto.BacklogItemDto backlogItem;
 
-    @NotNull(message = "NewIndex may not be null")
     @PositiveOrZero(message = "NewIndex must be greater than or equal to 0")
     @Schema(name = "newIndex", description = "The new index of the backlog item", example = "1")
     private int newIndex;

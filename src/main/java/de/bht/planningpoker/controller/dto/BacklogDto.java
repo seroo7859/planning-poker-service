@@ -44,7 +44,7 @@ public class BacklogDto {
         @JsonIgnore
         public static final String NUMBER_PREFIX = "US";
 
-        @NotNull(message = "Number may not be null")
+        @NotBlank(message = "Number may not be blank")
         @Size(min = 5, max = 5, message = "Number must be 5 characters long")
         @Pattern(regexp = "^" + NUMBER_PREFIX + "[0-9]{3}$", message = "Number must have the prefix " + NUMBER_PREFIX + " and continue with 3 digit characters")
         @Schema(name = "number", description = "The number of the backlog item", example = "US001")
