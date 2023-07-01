@@ -31,7 +31,7 @@ public interface SessionService {
     @Transactional(rollbackFor = Exception.class)
     Session joinSession(@UUID(message = "The session id must be a UUID") String publicId, @Valid User user) throws ServiceException;
 
-    @PreAuthorize("hasAnyRole('PARTICIPANT', 'SPECTATOR')")
+    @PreAuthorize("hasAnyRole('MODERATOR', 'PARTICIPANT', 'SPECTATOR')")
     @Transactional(rollbackFor = Exception.class)
     Session leaveSession(@UUID(message = "The session id must be a UUID") String publicId, @Valid User user) throws ServiceException;
 

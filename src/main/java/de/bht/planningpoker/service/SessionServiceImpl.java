@@ -49,7 +49,7 @@ public class SessionServiceImpl implements SessionService {
 
             // Get session details only for joined team members
             User currentUser = userService.getCurrentUser();
-            Optional<Session> session = repository.findByPublicIdAndTeamMembers(publicId, currentUser);
+            Optional<Session> session = repository.findByPublicIdAndUser(publicId, currentUser);
             return session.orElseThrow(() -> new SessionReadFailedException(publicId));
         } catch(DataAccessException e) {
             throw new ServiceException(ServiceErrorCode.READ_ERROR, e);
@@ -105,8 +105,8 @@ public class SessionServiceImpl implements SessionService {
             throw new ParameterNullException();
         }
         try {
-            Optional<Session> sessionOptional = repository.findByPublicId(publicId);
-            Session session = sessionOptional.orElseThrow(() -> new SessionNotFoundException(publicId));
+            Optional<Session> sessionFound = repository.findOneByPublicId(publicId);
+            Session session = sessionFound.orElseThrow(() -> new SessionNotFoundException(publicId));
 
             Team team = session.getTeam();
             User teamMember = team.getMember(user.getUsername());
@@ -139,8 +139,8 @@ public class SessionServiceImpl implements SessionService {
             throw new ParameterNullException();
         }
         try {
-            Optional<Session> sessionOptional = repository.findByPublicId(publicId);
-            Session session = sessionOptional.orElseThrow(() -> new SessionNotFoundException(publicId));
+            Optional<Session> sessionFound = repository.findOneByPublicId(publicId);
+            Session session = sessionFound.orElseThrow(() -> new SessionNotFoundException(publicId));
 
             Team team = session.getTeam();
             User teamMember = team.getMember(user.getUsername());
