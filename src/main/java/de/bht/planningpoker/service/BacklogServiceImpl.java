@@ -118,7 +118,7 @@ public class BacklogServiceImpl implements BacklogService {
 
     @Override
     public Backlog renameBacklog(String sessionId, String newName) throws ServiceException {
-        if (Objects.isNull(sessionId) || sessionId.isBlank()) {
+        if (Objects.isNull(sessionId) || sessionId.isBlank() || Objects.isNull(newName) || newName.isBlank()) {
             throw new ParameterNullException();
         }
         try {
@@ -182,7 +182,7 @@ public class BacklogServiceImpl implements BacklogService {
 
             return backlog.getItem(backlogItemNumber);
         } catch(DataAccessException e) {
-            throw new ServiceException(ServiceErrorCode.DELETE_ERROR, e);
+            throw new ServiceException(ServiceErrorCode.READ_ERROR, e);
         }
     }
 
