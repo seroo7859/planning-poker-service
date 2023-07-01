@@ -2,6 +2,7 @@ package de.bht.planningpoker.repository;
 
 import de.bht.planningpoker.model.Session;
 import de.bht.planningpoker.model.User;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -29,19 +30,31 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 
     @EntityGraph(
             type = EntityGraph.EntityGraphType.FETCH,
-            attributePaths = { "team", "team.members", "deck", "deck.cards", "backlog", "backlog.items" }
+            attributePaths = { "team", "deck", "backlog" }
     )
     Optional<Session> findByPublicId(String publicId);
 
-    @EntityGraph(
-            type = EntityGraph.EntityGraphType.FETCH,
-            attributePaths = { "team", "team.members", "deck", "deck.cards", "backlog", "backlog.items" }
-    )
-    Optional<Session> findByPublicIdAndTeamMembers(String publicId, User user);
+    default Optional<Session> findOneByPublicId(String sessionId) {
+        Optional<Session> sessionFound = findByPublicId(sessionId);
+        sessionFound.ifPresent(this::initializeProxy);
+        return sessionFound;
+    }
 
     @EntityGraph(
             type = EntityGraph.EntityGraphType.FETCH,
-            attributePaths = { "team", "team.members", "deck", "deck.cards", "backlog", "backlog.items" }
+            attributePaths = { "team", "deck", "backlog" }
+    )
+    Optional<Session> findByPublicIdAndTeamMembers(String publicId, User user);
+
+    default Optional<Session> findByPublicIdAndUser(String publicId, User user) {
+        Optional<Session> sessionFound = findByPublicIdAndTeamMembers(publicId, user);
+        sessionFound.ifPresent(this::initializeProxy);
+        return sessionFound;
+    }
+
+    @EntityGraph(
+            type = EntityGraph.EntityGraphType.FETCH,
+            attributePaths = { "team", "deck", "backlog" }
     )
     @Override
     List<Session> findAllById(Iterable<Long> ids);
@@ -63,13 +76,26 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 
         // Fetch entities with @EntityGraph from previous returned ids and re-sort entities to preserve order
         List<Session> sessions = findAllById(ids).stream()
-//                .peek((session) -> {
-//                    Hibernate.initialize(session.getTeam().getMembers());
-//                    Hibernate.initialize(session.getDeck().getCards());
-//                })
+                .peek(session -> {
+                    initializeProxy(session);
+                    session.getEstimationRounds()
+                            .stream()
+                            .limit(Math.max(0, session.getEstimationRoundCount() - 1))      // ignore current estimation round
+                            .forEach(estimationRound -> Hibernate.initialize(estimationRound.getEstimations()));
+                })
                 .sorted(Comparator.comparing(session -> ids.indexOf(session.getId())))
                 .toList();
         return new PageImpl<Session>(sessions, pageable, paginatedSession.getTotalElements());
+    }
+
+    default void initializeProxy(Session session) {
+        Hibernate.initialize(session.getTeam().getMembers());
+        Hibernate.initialize(session.getDeck().getCards());
+        Hibernate.initialize(session.getBacklog().getItems());
+        Hibernate.initialize(session.getCurrentEstimationRound());
+        session.getCurrentEstimationRound().ifPresent(estimationRound -> {
+            Hibernate.initialize(estimationRound.getEstimations());
+        });
     }
 
 }
