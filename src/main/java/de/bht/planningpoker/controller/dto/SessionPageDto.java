@@ -35,32 +35,26 @@ public class SessionPageDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class SessionPageInfoDto {
 
-        @NotNull(message = "PageNumber may not be null")
         @PositiveOrZero(message = "PageNumber must be greater than or equal to 0")
         @Schema(name = "pageNumber", description = "The page number of session page", example = "1")
         private int pageNumber;
 
-        @NotNull(message = "PageSize may not be null")
         @PositiveOrZero(message = "PageSize must be greater than or equal to 0")
         @Schema(name = "pageSize", description = "The page size of session page", example = "10")
         private int pageSize;
 
-        @NotNull(message = "Offset may not be null")
         @PositiveOrZero(message = "Offset must be greater than or equal to 0")
         @Schema(name = "offset", description = "The offset of session page", example = "0")
         private long offset;
 
-        @NotNull(message = "TotalPages may not be null")
         @PositiveOrZero(message = "TotalPages must be greater than or equal to 0")
         @Schema(name = "TotalPage", description = "The total number of session pages", example = "100")
         private int totalPages;
 
-        @NotNull(message = "TotalItems may not be null")
         @PositiveOrZero(message = "TotalItems must be greater than or equal to 0")
         @Schema(name = "TotalItems", description = "The total number of session page items", example = "1000")
         private long totalItems;
 
-        @NotNull(message = "NumberOfItems may not be null")
         @PositiveOrZero(message = "NumberOfItems must be greater than or equal to 0")
         @Schema(name = "NumberOfItems", description = "The number of session page items", example = "10")
         private int numberOfItems;
@@ -91,29 +85,33 @@ public class SessionPageDto {
         @Schema(name = "teamName", description = "The name of team", example = "MyTeam")
         private String teamName;
 
-        @NotNull(message = "TotalMembers may not be null")
         @Min(value = 1, message = "Minimum of 1 members can be in a team")
         @Max(value = MAX_TEAM_SIZE, message = "Maximum of " + MAX_TEAM_SIZE + " members can be in a team")
         @Schema(name = "totalMembers", description = "The total count of members in the team", example = "6")
         private int totalMembers;
 
-        @NotNull(message = "ActiveMembers may not be null")
         @Min(value = 0, message = "Minimum of 0 members can be active")
         @Max(value = MAX_TEAM_SIZE, message = "Maximum of " + MAX_TEAM_SIZE + " members can be active")
         @Schema(name = "activeMembers", description = "The count of active members", example = "3")
         private int activeMembers;
 
-        @NotNull(message = "TotalBacklogItems may not be null")
         @Min(value = 0, message = "Minimum of 0 backlog items can be in a backlog")
         @Max(value = MAX_BACKLOG_SIZE, message = "Maximum of " + MAX_BACKLOG_SIZE + " backlog items can be in a backlog")
         @Schema(name = "totalBacklogItems", description = "The total count of backlog items in the backlog", example = "10")
         private int totalBacklogItems;
 
-        @NotNull(message = "EstimatedBacklogItems may not be null")
         @Min(value = 0, message = "Minimum of 0 backlog items can be estimated")
         @Max(value = MAX_BACKLOG_SIZE, message = "Maximum of " + MAX_BACKLOG_SIZE + " backlog items can be estimated")
-        @Schema(name = "totalBacklogItems", description = "The total count of estimated backlog items", example = "3")
+        @Schema(name = "estimatedBacklogItems", description = "The total count of estimated backlog items", example = "3")
         private int estimatedBacklogItems;
+
+        @PositiveOrZero(message = "TotalEstimationRounds must be greater than or equal to 0")
+        @Schema(name = "totalEstimationRounds", description = "The total count of estimation rounds", example = "12")
+        private int totalEstimationRounds;
+
+        @PositiveOrZero(message = "TotalEstimations must be greater than or equal to 0")
+        @Schema(name = "totalEstimations", description = "The total count of estimations", example = "22")
+        private int totalEstimations;
 
         @NotBlank(message = "DeckName may not be blank")
         @Size(min = 1, max = 32, message = "DeckName must be between 1 and 32 characters long")
@@ -129,7 +127,7 @@ public class SessionPageDto {
         @NotNull(message = "CreatedAt may not be null")
         @PastOrPresent(message = "CreatedAp must be on past or present")
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        @Schema(name = "createdAt", description = "The creation date of the session", example = "2023-05-16 10:00:00")
+        @Schema(name = "createdAt", description = "The creation date of the session", type = "string", example = "2023-05-16 10:00:00")
         private Date createdAt;
 
     }
