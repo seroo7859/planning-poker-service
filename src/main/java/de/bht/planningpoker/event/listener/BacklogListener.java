@@ -59,7 +59,7 @@ public class BacklogListener {
         BacklogItem backlogItem = event.getBacklogItem();
         Session session = backlogItem.getBacklog().getSession();
 
-        log.info("BacklogItem {} added on session {}", backlogItem.getNumber(), session.getPublicId());
+        log.info("Backlog item {} added on session {}", backlogItem.getNumber(), session.getPublicId());
         simpMessagingTemplate.convertAndSend(String.format("/session/%s/backlog/item-added", session.getPublicId()), mapper.mapToDto(backlogItem));
     }
 
@@ -69,7 +69,7 @@ public class BacklogListener {
         BacklogItem backlogItem = event.getBacklogItem();
         Session session = backlogItem.getBacklog().getSession();
 
-        log.info("BacklogItem {} removed on session {}", backlogItem.getNumber(), session.getPublicId());
+        log.info("Backlog item {} removed on session {}", backlogItem.getNumber(), session.getPublicId());
         simpMessagingTemplate.convertAndSend(String.format("/session/%s/backlog/item-removed", session.getPublicId()), mapper.mapToDto(backlogItem));
     }
 
@@ -79,7 +79,7 @@ public class BacklogListener {
         BacklogItem backlogItem = event.getBacklogItem();
         Session session = backlogItem.getBacklog().getSession();
 
-        log.info("BacklogItem {} updated on session {}", backlogItem.getNumber(), session.getPublicId());
+        log.info("Backlog item {} updated on session {}", backlogItem.getNumber(), session.getPublicId());
         simpMessagingTemplate.convertAndSend(String.format("/session/%s/backlog/item-updated", session.getPublicId()), mapper.mapToDto(backlogItem));
     }
 
@@ -91,7 +91,7 @@ public class BacklogListener {
         Session session = backlog.getSession();
         int backlogItemIndex = backlog.getItemIndex(backlogItem.getNumber());
 
-        log.info("BacklogItem {} moved to new index {} on session {}", backlogItem.getNumber(), backlogItemIndex, session.getPublicId());
+        log.info("Backlog item {} moved to new index {} on session {}", backlogItem.getNumber(), backlogItemIndex, session.getPublicId());
 
         BacklogItemMoveResultDto dto = new BacklogItemMoveResultDto(mapper.mapToDto(backlog), mapper.mapToDto(backlogItem), backlogItemIndex);
         simpMessagingTemplate.convertAndSend(String.format("/session/%s/backlog/item-moved", session.getPublicId()), dto);
