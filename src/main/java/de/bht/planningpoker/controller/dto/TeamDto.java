@@ -47,7 +47,6 @@ public class TeamDto {
         @Schema(name = "name", description = "The name of team member", example = "John")
         private String name;
 
-        @NotNull(message = "Active may not be null")
         @Schema(name = "active", description = "Is team member active", example = "true")
         private boolean active;
 
