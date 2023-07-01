@@ -17,7 +17,7 @@ public class UserController implements UserResource {
     private final UserMapper mapper;
 
     @Override
-    public ResponseEntity<UserDto> getCurrent() throws ServiceException {
+    public ResponseEntity<UserDto> getInfo() throws ServiceException {
         User currentUser = service.getCurrentUser();
         return ResponseEntity.ok(mapper.mapToDto(currentUser));
     }

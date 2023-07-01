@@ -29,6 +29,6 @@ public interface UserResource {
             @ApiResponse(responseCode = "401", description = "User not authenticated", content = @Content)
     })
     @SecurityRequirement(name = "bearer-auth")
-    ResponseEntity<UserDto> getCurrent() throws ServiceException;
+    ResponseEntity<UserDto> getInfo() throws ServiceException;
 
 }
