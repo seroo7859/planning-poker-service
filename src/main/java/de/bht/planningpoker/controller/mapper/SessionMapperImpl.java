@@ -8,10 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -22,6 +19,7 @@ public class SessionMapperImpl implements SessionMapper {
     private final TeamMapper teamMapper;
     private final DeckMapper deckMapper;
     private final BacklogMapper backlogMapper;
+    private final EstimationMapper estimationMapper;
 
     @Override
     public SessionPageDto mapToDto(Page<Session> pagedSessions) {
@@ -48,6 +46,8 @@ public class SessionMapperImpl implements SessionMapper {
                             .activeMembers(session.getTeam().getActiveMembers().size())
                             .totalBacklogItems(session.getBacklog().getSize())
                             .estimatedBacklogItems(session.getBacklog().getEstimatedItems().size())
+                            .totalEstimationRounds(session.getEstimationRoundCount())
+                            .totalEstimations(session.getEstimationCount())
                             .deckName(session.getDeck().getName())
                             .deckCards(deckCardsToCsv.apply(session.getDeck().getCards()))
                             .createdAt(convertToDate(session.getCreatedAt()))
@@ -67,6 +67,8 @@ public class SessionMapperImpl implements SessionMapper {
                 .team(teamMapper.mapToDto(session.getTeam()))
                 .deck(deckMapper.mapToDto(session.getDeck()))
                 .backlog(backlogMapper.mapToDto(session.getBacklog()))
+                .estimationRound(estimationMapper.mapToDto(session.getCurrentEstimationRound().orElse(null)))
+                .estimationSummary(estimationMapper.mapToDto(session.getCurrentEstimationRound().map(EstimationRound::getSummary).orElse(null)))
                 .createdAt(convertToDate(session.getCreatedAt()))
                 .build();
     }
@@ -99,6 +101,7 @@ public class SessionMapperImpl implements SessionMapper {
                 .team(team)
                 .deck(deckMapper.mapToModel(sessionCreateDto.getDeck()))
                 .backlog(backlog)
+                .estimationRounds(List.of())
                 .build();
     }
 
