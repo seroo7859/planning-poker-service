@@ -126,6 +126,12 @@ public class ExceptionHandlerAdvice {
         return buildResponseEntity(errorMsg);
     }
 
+    @ExceptionHandler(TeamNotFoundException.class)
+    public ResponseEntity<ErrorMsg> handleTeamNotFoundException(TeamNotFoundException ex, HttpServletRequest request) {
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.NOT_FOUND, request, ex);
+        return buildResponseEntity(errorMsg);
+    }
+
     @ExceptionHandler(BacklogNotFoundException.class)
     public ResponseEntity<ErrorMsg> handleBacklogNotFoundException(BacklogNotFoundException ex, HttpServletRequest request) {
         ErrorMsg errorMsg = new ErrorMsg(HttpStatus.NOT_FOUND, request, ex);
@@ -135,6 +141,24 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(BacklogItemNotFoundException.class)
     public ResponseEntity<ErrorMsg> handleBacklogItemNotFoundException(BacklogItemNotFoundException ex, HttpServletRequest request) {
         ErrorMsg errorMsg = new ErrorMsg(HttpStatus.NOT_FOUND, request, ex);
+        return buildResponseEntity(errorMsg);
+    }
+
+    @ExceptionHandler(EstimationRoundNotFoundException.class)
+    public ResponseEntity<ErrorMsg> handleEstimationRoundNotFoundException(EstimationRoundNotFoundException ex, HttpServletRequest request) {
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.NOT_FOUND, request, ex);
+        return buildResponseEntity(errorMsg);
+    }
+
+    @ExceptionHandler(EstimationRoundAlreadyFinishedException.class)
+    public ResponseEntity<ErrorMsg> handleEstimationRoundAlreadyFinishedException(EstimationRoundAlreadyFinishedException ex, HttpServletRequest request) {
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.BAD_REQUEST, request, ex);
+        return buildResponseEntity(errorMsg);
+    }
+
+    @ExceptionHandler(EstimationRoundNotFinishedException.class)
+    public ResponseEntity<ErrorMsg> handleEstimationRoundNotFinishedException(EstimationRoundNotFinishedException ex, HttpServletRequest request) {
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.BAD_REQUEST, request, ex);
         return buildResponseEntity(errorMsg);
     }
 
