@@ -50,6 +50,11 @@ public class Session {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Backlog backlog;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "discussion_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Discussion discussion;
+
     @OneToMany(mappedBy = "session", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<@Valid EstimationRound> estimationRounds = new ArrayList<>();
@@ -107,6 +112,9 @@ public class Session {
         }
         if (Objects.isNull(backlog.getSession())) {
             backlog.setSession(this);
+        }
+        if (Objects.isNull(discussion.getSession())) {
+            discussion.setSession(this);
         }
         if (Objects.nonNull(estimationRounds)) {
             estimationRounds.forEach(estimationRound -> {
