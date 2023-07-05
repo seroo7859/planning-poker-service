@@ -39,7 +39,6 @@ public class EstimationRoundDto {
     @Schema(name = "startedAt", description = "The start date of the estimation round", type = "string", example = "2023-05-16 10:00:00")
     private LocalDateTime startedAt;
 
-    @PastOrPresent(message = "FinishedAt must be on past or present")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(name = "finishedAt", description = "The finish date of the estimation round", type = "string", example = "2023-05-16 10:00:00")
     private LocalDateTime finishedAt;
