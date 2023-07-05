@@ -30,7 +30,7 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 
     @EntityGraph(
             type = EntityGraph.EntityGraphType.FETCH,
-            attributePaths = { "team", "deck", "backlog" }
+            attributePaths = { "team", "deck", "backlog", "discussion" }
     )
     Optional<Session> findByPublicId(String publicId);
 
@@ -42,7 +42,7 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 
     @EntityGraph(
             type = EntityGraph.EntityGraphType.FETCH,
-            attributePaths = { "team", "deck", "backlog" }
+            attributePaths = { "team", "deck", "backlog", "discussion" }
     )
     Optional<Session> findByPublicIdAndTeamMembers(String publicId, User user);
 
@@ -54,7 +54,7 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 
     @EntityGraph(
             type = EntityGraph.EntityGraphType.FETCH,
-            attributePaths = { "team", "deck", "backlog" }
+            attributePaths = { "team", "deck", "backlog", "discussion" }
     )
     @Override
     List<Session> findAllById(Iterable<Long> ids);
@@ -92,6 +92,7 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
         Hibernate.initialize(session.getTeam().getMembers());
         Hibernate.initialize(session.getDeck().getCards());
         Hibernate.initialize(session.getBacklog().getItems());
+        Hibernate.initialize(session.getDiscussion().getPosts());
         Hibernate.initialize(session.getCurrentEstimationRound());
         session.getCurrentEstimationRound().ifPresent(estimationRound -> {
             Hibernate.initialize(estimationRound.getEstimations());
