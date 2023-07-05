@@ -74,6 +74,9 @@ public class SessionPageDto {
         @JsonIgnore
         public static final int MAX_BACKLOG_SIZE = 1000;
 
+        @JsonIgnore
+        public static final int MAX_DISCUSSION_POST_COUNT = 10000;
+
         @NotBlank(message = "ID may not be blank")
         @UUID(message = "ID must be a UUID")
         @Schema(name = "id", description = "The public ID of the session", example = "0ea43720-2256-46de-8854-0359ef5c4977")
@@ -104,6 +107,11 @@ public class SessionPageDto {
         @Max(value = MAX_BACKLOG_SIZE, message = "Maximum of " + MAX_BACKLOG_SIZE + " backlog items can be estimated")
         @Schema(name = "estimatedBacklogItems", description = "The total count of estimated backlog items", example = "3")
         private int estimatedBacklogItems;
+
+        @Min(value = 0, message = "Minimum of 0 discussion posts can be in a discussion")
+        @Max(value = MAX_DISCUSSION_POST_COUNT, message = "Maximum of " + MAX_DISCUSSION_POST_COUNT + " discussion posts can be in a discussion")
+        @Schema(name = "totalDiscussionPosts", description = "The total count of discussion posts", example = "36")
+        private int totalDiscussionPosts;
 
         @PositiveOrZero(message = "TotalEstimationRounds must be greater than or equal to 0")
         @Schema(name = "totalEstimationRounds", description = "The total count of estimation rounds", example = "12")

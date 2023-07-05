@@ -33,12 +33,15 @@ public class SessionDto {
     @NotNull(message = "Backlog may not be null")
     private @Valid BacklogDto backlog;
 
+    @NotNull(message = "Discussion may not be null")
+    private @Valid DiscussionDto discussion;
+
     private @Valid EstimationRoundDto estimationRound;
 
     private @Valid EstimationSummaryDto estimationSummary;
 
     @NotNull(message = "CreatedAt may not be null")
-    @PastOrPresent(message = "CreatedAp must be on past or present")
+    @PastOrPresent(message = "CreatedAt must be on past or present")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Schema(name = "createdAt", description = "The creation date of the session", type = "string", example = "2023-05-16 10:00:00")
     private Date createdAt;
