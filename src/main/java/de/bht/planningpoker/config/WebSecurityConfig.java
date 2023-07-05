@@ -54,6 +54,7 @@ public class WebSecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/api/user/info").authenticated()
                     .requestMatchers("/api/team/**").authenticated()
                     .requestMatchers("/api/backlog/**").authenticated()
+                    .requestMatchers("/api/discussion/**").authenticated()
                     .requestMatchers("/api/estimation/**").authenticated()
                     .anyRequest().permitAll()
             )
