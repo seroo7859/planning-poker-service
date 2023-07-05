@@ -45,7 +45,7 @@ public class BacklogItem implements Cloneable {
 
     @NotNull(message = "Estimation may not be null")
     @Size(min = 0, max = 3, message = "Estimation must be between 0 and 3 characters long")
-    @Pattern(regexp = "^[A-Za-z0-9]{0,3}$", message = "Estimation must be alphanumeric characters")
+    @Pattern(regexp = "^[A-Za-z0-9½?∞\\p{So}]{0,3}$", message = "Estimation must be alphanumeric characters or other symbols")
     @Column(nullable = false, length = 3)
     private String estimation;
 
