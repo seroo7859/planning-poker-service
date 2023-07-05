@@ -15,10 +15,10 @@ INSERT INTO `user`
     (`id`,`team_id`, `username`, `active`, `role`)
 VALUES
     (1, 1, 'Max', 0, 'MODERATOR'),
-    (2, 1, 'John', 0, 'PARTICIPANT'),
+    (2, 1, 'Noha', 0, 'PARTICIPANT'),
     (3, 1, 'Luca', 0, 'SPECTATOR'),
 
-    (4, 2, 'Noha', 0, 'MODERATOR'),
+    (4, 2, 'John', 0, 'MODERATOR'),
     (5, 2, 'Maria', 0, 'PARTICIPANT'),
     (6, 2, 'Tim', 0, 'SPECTATOR'),
 
@@ -179,13 +179,33 @@ VALUES
     (20, 2, 9, 'US008', 'Export Data', 'As an authorized user I want to be able to export data', '', '10', 1, 1);
 
 
+DELETE FROM `discussion`;
+INSERT INTO `discussion`
+    (`id`, `topic`, `active`, `started_at`, `ended_at`)
+VALUES
+    (1, 'General', 0, null, null),
+    (2, 'Estimate results', 1, CURRENT_TIMESTAMP(), null),
+    (3, 'Dissent', 0, CURRENT_TIMESTAMP(), TIMESTAMPADD(MINUTE, 1, CURRENT_TIMESTAMP()));
+
+
+DELETE FROM `discussion_post`;
+INSERT INTO `discussion_post`
+    (`id`, `discussion_id`, `list_index`, `content`, `author`)
+VALUES
+    (1, 2, 0, 'Hello members 🙂, I am the moderator of this planning poker session.', 4),
+    (2, 2, 1, 'I think the backlog item US001 is more complex than US002.', 5),
+
+    (3, 3, 0, 'Let\'s estimate together.', 7),
+    (4, 3, 1, 'When does the estimation round start?', 8);
+
+
 DELETE FROM `session`;
 INSERT INTO `session`
-    (`id`, `public_id`, `team_id`, `deck_id`, `backlog_id`, `created_by`)
+    (`id`, `public_id`, `team_id`, `deck_id`, `backlog_id`, `discussion_id`, `created_by`)
 VALUES
-    (1, UUID(), 1, 1, 1, 1),
-    (2, UUID(), 2, 2, 2, 1),
-    (3, UUID(), 3, 3, 3, 1);
+    (1, UUID(), 1, 1, 1, 1, 1),
+    (2, '00112233-4444-5567-8888-999999999999', 2, 2, 2, 2, 4),
+    (3, UUID(), 3, 3, 3, 3, 7);
 
 
 DELETE FROM `estimation_round`;

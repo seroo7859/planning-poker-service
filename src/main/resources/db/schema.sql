@@ -1,6 +1,3 @@
-SET time_zone = '+2:00';
-
-
 CREATE DATABASE IF NOT EXISTS `planningpoker`;
 USE `planningpoker`;
 
@@ -105,24 +102,53 @@ CREATE TABLE IF NOT EXISTS `backlog_item`
 );
 
 
-CREATE TABLE IF NOT EXISTS `session`
+CREATE TABLE IF NOT EXISTS `discussion`
 (
-    `id`         BIGINT      NOT NULL AUTO_INCREMENT,
-    `public_id`  VARCHAR(36) NOT NULL UNIQUE,
-    `team_id`    BIGINT      NULL,
-    `deck_id`    BIGINT      NULL,
-    `backlog_id` BIGINT      NULL,
-    `created_by` BIGINT      NULL,
-    `created_at` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT `pk_session` PRIMARY KEY (`id`),
-    CONSTRAINT `fk_session_team`    FOREIGN KEY (`team_id`)    REFERENCES `team` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk_session_deck`    FOREIGN KEY (`deck_id`)    REFERENCES `deck` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk_session_backlog` FOREIGN KEY (`backlog_id`) REFERENCES `backlog` (`id`) ON DELETE CASCADE,
-    CONSTRAINT `fk_session_user`    FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE CASCADE
+    `id`         BIGINT   NOT NULL AUTO_INCREMENT,
+    `topic`      VARCHAR(32) NOT NULL,
+    `active`     BIT(1)   NOT NULL,
+    `started_at` DATETIME NULL,
+    `ended_at`   DATETIME NULL,
+    CONSTRAINT `pk_discussion` PRIMARY KEY (`id`)
 );
 
 
-CREATE TABLE IF NOT EXISTS `estimation_round` (
+CREATE TABLE IF NOT EXISTS `discussion_post`
+(
+    `id`            BIGINT       NOT NULL AUTO_INCREMENT,
+    `discussion_id` BIGINT       NOT NULL,
+    `list_index`    INT          NOT NULL DEFAULT 0,
+    `content`       VARCHAR(512) NOT NULL,
+    `author`        BIGINT       NULL,
+    `created_at`    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`    DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT `pk_discussion_post` PRIMARY KEY (`id`),
+    CONSTRAINT `fk_discussion_post_discussion` FOREIGN KEY (`discussion_id`) REFERENCES `discussion` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_discussion_post_author`     FOREIGN KEY (`author`)        REFERENCES `user` (`id`) ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS `session`
+(
+    `id`            BIGINT      NOT NULL AUTO_INCREMENT,
+    `public_id`     VARCHAR(36) NOT NULL UNIQUE,
+    `team_id`       BIGINT      NULL,
+    `deck_id`       BIGINT      NULL,
+    `backlog_id`    BIGINT      NULL,
+    `discussion_id` BIGINT      NULL,
+    `created_by`    BIGINT      NULL,
+    `created_at`    DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT `pk_session` PRIMARY KEY (`id`),
+    CONSTRAINT `fk_session_team`       FOREIGN KEY (`team_id`)       REFERENCES `team` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_session_deck`       FOREIGN KEY (`deck_id`)       REFERENCES `deck` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_session_backlog`    FOREIGN KEY (`backlog_id`)    REFERENCES `backlog` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_session_discussion` FOREIGN KEY (`discussion_id`) REFERENCES `discussion` (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_session_user`       FOREIGN KEY (`created_by`)    REFERENCES `user` (`id`) ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS `estimation_round`
+(
     `id`              BIGINT   NOT NULL AUTO_INCREMENT,
     `session_id`      BIGINT   NOT NULL,
     `backlog_item_id` BIGINT   NOT NULL,
@@ -134,7 +160,8 @@ CREATE TABLE IF NOT EXISTS `estimation_round` (
 );
 
 
-CREATE TABLE IF NOT EXISTS `estimation` (
+CREATE TABLE IF NOT EXISTS `estimation`
+(
     `id`                  BIGINT     NOT NULL AUTO_INCREMENT,
     `estimation_round_id` BIGINT     NOT NULL,
     `list_index`          INT        NOT NULL DEFAULT 0,
