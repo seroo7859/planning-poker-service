@@ -144,6 +144,24 @@ public class ExceptionHandlerAdvice {
         return buildResponseEntity(errorMsg);
     }
 
+    @ExceptionHandler(DiscussionNotFoundException.class)
+    public ResponseEntity<ErrorMsg> handleDiscussionNotFoundException(DiscussionNotFoundException ex, HttpServletRequest request) {
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.NOT_FOUND, request, ex);
+        return buildResponseEntity(errorMsg);
+    }
+
+    @ExceptionHandler(DiscussionAlreadyStartedException.class)
+    public ResponseEntity<ErrorMsg> handleDiscussionAlreadyStartedException(DiscussionAlreadyStartedException ex, HttpServletRequest request) {
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.BAD_REQUEST, request, ex);
+        return buildResponseEntity(errorMsg);
+    }
+
+    @ExceptionHandler(DiscussionAlreadyEndedException.class)
+    public ResponseEntity<ErrorMsg> handleDiscussionAlreadyEndedException(DiscussionAlreadyEndedException ex, HttpServletRequest request) {
+        ErrorMsg errorMsg = new ErrorMsg(HttpStatus.BAD_REQUEST, request, ex);
+        return buildResponseEntity(errorMsg);
+    }
+
     @ExceptionHandler(EstimationRoundNotFoundException.class)
     public ResponseEntity<ErrorMsg> handleEstimationRoundNotFoundException(EstimationRoundNotFoundException ex, HttpServletRequest request) {
         ErrorMsg errorMsg = new ErrorMsg(HttpStatus.NOT_FOUND, request, ex);
