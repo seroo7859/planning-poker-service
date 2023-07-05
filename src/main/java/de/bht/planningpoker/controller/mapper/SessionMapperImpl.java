@@ -19,6 +19,7 @@ public class SessionMapperImpl implements SessionMapper {
     private final TeamMapper teamMapper;
     private final DeckMapper deckMapper;
     private final BacklogMapper backlogMapper;
+    private final DiscussionMapper discussionMapper;
     private final EstimationMapper estimationMapper;
 
     @Override
@@ -46,6 +47,7 @@ public class SessionMapperImpl implements SessionMapper {
                             .activeMembers(session.getTeam().getActiveMembers().size())
                             .totalBacklogItems(session.getBacklog().getSize())
                             .estimatedBacklogItems(session.getBacklog().getEstimatedItems().size())
+                            .totalDiscussionPosts(session.getDiscussion().getPostCount())
                             .totalEstimationRounds(session.getEstimationRoundCount())
                             .totalEstimations(session.getEstimationCount())
                             .deckName(session.getDeck().getName())
@@ -67,6 +69,7 @@ public class SessionMapperImpl implements SessionMapper {
                 .team(teamMapper.mapToDto(session.getTeam()))
                 .deck(deckMapper.mapToDto(session.getDeck()))
                 .backlog(backlogMapper.mapToDto(session.getBacklog()))
+                .discussion(discussionMapper.mapToDto(session.getDiscussion()))
                 .estimationRound(estimationMapper.mapToDto(session.getCurrentEstimationRound().orElse(null)))
                 .estimationSummary(estimationMapper.mapToDto(session.getCurrentEstimationRound().map(EstimationRound::getSummary).orElse(null)))
                 .createdAt(convertToDate(session.getCreatedAt()))
@@ -96,11 +99,18 @@ public class SessionMapperImpl implements SessionMapper {
                 .items(Collections.emptyList())
                 .build();
 
+        final Discussion discussion = Discussion.builder()
+                .topic("General")
+                .active(false)
+                .posts(Collections.emptyList())
+                .build();
+
         return Session.builder()
                 .publicId(UUID.randomUUID().toString())
                 .team(team)
                 .deck(deckMapper.mapToModel(sessionCreateDto.getDeck()))
                 .backlog(backlog)
+                .discussion(discussion)
                 .estimationRounds(List.of())
                 .build();
     }
