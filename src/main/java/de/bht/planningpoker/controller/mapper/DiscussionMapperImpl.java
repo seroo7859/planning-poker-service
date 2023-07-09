@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class DiscussionMapperImpl implements DiscussionMapper {
@@ -27,6 +28,7 @@ public class DiscussionMapperImpl implements DiscussionMapper {
     @Override
     public List<DiscussionDto.DiscussionPostDto> mapToDto(List<DiscussionPost> posts) {
         return posts.stream()
+                .filter(Objects::nonNull)
                 .map(this::mapToDto)
                 .toList();
     }

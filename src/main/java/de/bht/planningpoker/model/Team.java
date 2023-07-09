@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -36,6 +38,7 @@ public class Team {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "team")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Session session;
 
     @EqualsAndHashCode.Exclude
