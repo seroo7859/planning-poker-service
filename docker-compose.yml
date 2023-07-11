@@ -6,6 +6,7 @@ services:
     depends_on:
       - mysql
     build: .
+    hostname: planning-poker-service
     ports:
       - "8080:8080"
     environment:
