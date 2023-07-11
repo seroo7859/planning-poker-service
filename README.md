@@ -2,7 +2,7 @@
 
 [[_TOC_]]
 
-## Stack
+## Technologies
 
 - Spring Boot 3.0.6
 - Spring Framework 6.0
