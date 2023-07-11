@@ -33,23 +33,23 @@ Start the MySQL Server:
 docker-compose up -d mysql
 ```
 
+## Demo
+
+Start the Demo Application:
+```shell
+docker-compose up -d
+```
+
+Stop the Demo Application:
+```shell
+docker-compose down -v
+```
+
 ## Development
 
 Start the Application:
 ```shell
 mvn spring-boot:run
-```
-
-## Demo
-
-Start the Demo:
-```shell
-docker-compose up -d
-```
-
-Stop the Demo:
-```shell
-docker-compose down -v
 ```
 
 ## Links
