@@ -4,6 +4,8 @@
 
 ## Stack
 
+- Spring Boot 3.0.6
+- Spring Framework 6.0
 - Java 17.0.2
 - Maven 3.8.7
 - MySQL 8.0
