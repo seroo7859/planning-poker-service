@@ -1,7 +1,5 @@
 # Planning Poker Service
 
-[[_TOC_]]
-
 ## Technologies
 
 - Spring Boot 3.0.6
