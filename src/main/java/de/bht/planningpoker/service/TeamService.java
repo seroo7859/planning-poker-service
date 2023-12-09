@@ -12,7 +12,7 @@ public interface TeamService {
 
     @PreAuthorize("hasAnyRole('MODERATOR', 'PARTICIPANT', 'SPECTATOR')")
     @Transactional(readOnly = true)
-    Team getTeam(String sessionId) throws ServiceException;
+    Team getTeam(@UUID(message = "The session id must be a UUID") String sessionId) throws ServiceException;
 
     @PreAuthorize("hasRole('MODERATOR')")
     @Transactional(rollbackFor = Exception.class)
