@@ -29,7 +29,7 @@ public enum Permission {
     DISCUSSION_POST_READ("discussion-post:read");
 
     @NotBlank(message = "Permission may not be blank")
-    @Pattern(regexp = "^[a-z]+:[a-z]+$", message = "Permission must be lower case letter from a to z and match with format <entity>:<operation>")
+    @Pattern(regexp = "^[a-z\\-]+:[a-z\\-]+$", message = "Permission must be lower case letter from a to z and match with format <entity>:<operation>")
     @Getter
     private final String permission;
 }
