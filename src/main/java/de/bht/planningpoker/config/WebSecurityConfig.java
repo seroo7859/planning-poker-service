@@ -47,7 +47,7 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200", "https://planning-poker-angular.onrender.com/"));
+        configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:3000/", "https://planning-poker-angular.onrender.com/"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(List.of("Origin", "X-Requested-With", "Accept", "Content-Type", "Authorization"));
         configuration.setExposedHeaders(List.of("X-Token", "X-Token-Format", "Content-Disposition"));
