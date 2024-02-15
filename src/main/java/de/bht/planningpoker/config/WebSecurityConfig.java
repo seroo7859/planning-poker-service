@@ -50,7 +50,7 @@ public class WebSecurityConfig {
         configuration.setAllowedOrigins(List.of("http://localhost:4200", "https://planning-poker-angular.onrender.com/"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(List.of("Origin", "X-Requested-With", "Accept", "Content-Type", "Authorization"));
-        configuration.setExposedHeaders(List.of("X-Token", "X-Token-Format"));
+        configuration.setExposedHeaders(List.of("X-Token", "X-Token-Format", "Content-Disposition"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
