@@ -5,6 +5,8 @@ COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
+RUN dos2unix ./mvnw
+RUN chmod +x ./mvnw
 RUN ./mvnw install -DskipTests
 RUN java -Djarmode=layertools -jar target/*.jar extract --destination target/extracted
 
