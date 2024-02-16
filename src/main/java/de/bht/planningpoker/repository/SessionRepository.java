@@ -97,6 +97,7 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
         Hibernate.initialize(session.getDiscussion().getPosts());
         Hibernate.initialize(session.getCurrentEstimationRound());
         session.getCurrentEstimationRound().ifPresent(estimationRound -> {
+            Hibernate.initialize(estimationRound.getBacklogItem());
             Hibernate.initialize(estimationRound.getEstimations());
         });
     }
