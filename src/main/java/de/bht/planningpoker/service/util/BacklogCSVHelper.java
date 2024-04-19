@@ -62,7 +62,7 @@ public class BacklogCSVHelper {
                         .number(csvRecord.get(BacklogItemHeaders.Number))
                         .title(csvRecord.get(BacklogItemHeaders.Title))
                         .description(csvRecord.get(BacklogItemHeaders.Description))
-                        .estimation(csvRecord.get(BacklogItemHeaders.Estimation))
+                        .estimation(csvRecord.get(BacklogItemHeaders.Estimation).trim())
                         .priority(csvRecord.get(BacklogItemHeaders.Priority))
                         .build();
                 backlogItems.add(backlogItem);
@@ -87,7 +87,7 @@ public class BacklogCSVHelper {
                     backlogItem.getNumber(),
                     backlogItem.getTitle(),
                     backlogItem.getDescription(),
-                    backlogItem.getEstimation(),
+                    backlogItem.getEstimation().isBlank() ? " " : backlogItem.getEstimation(),
                     backlogItem.getPriority()
                 );
                 csvPrinter.printRecord(csvRecord);
